@@ -10,6 +10,7 @@ object AvgByTypeCalculator extends App {
   def avgTransactionsByType(sourceDS: Dataset[Transaction]): Dataset[AverageByTxType] = {
     val targetTxTypes = Seq("AA", "BB", "CC", "DD", "EE", "FF", "GG")
 
+    import spark.implicits._
     sourceDS
       .toDF()
       .groupBy("accountId")

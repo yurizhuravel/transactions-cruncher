@@ -13,7 +13,8 @@ object RollingAvgCalculator extends App {
   */
 
   // 1: Pre-aggregate to one row per account per day and add count to use for averages later
-  val dailyAggregatedDF = transactionsDF
+  val dailyAggregatedDF = transactionsDS
+    .toDF()
     .groupBy("accountId", "transactionDay")
     .agg(
       max("transactionAmount").as("maxPerDay"),
@@ -25,8 +26,8 @@ object RollingAvgCalculator extends App {
     )
 
   // 2: Create a grid of account-day combinations
-  val allAccounts = transactionsDF.select("accountId").distinct()
-  val allDays = transactionsDF.select("transactionDay").distinct()
+  val allAccounts = transactionsDS.select("accountId").distinct()
+  val allDays = transactionsDS.select("transactionDay").distinct()
   val allAccountDays = allAccounts.crossJoin(allDays)
 
   // 3: Join to ensure all account-day combinations exist, fill missing values with 0
@@ -62,12 +63,17 @@ object RollingAvgCalculator extends App {
       col("FFTotalValue")
     )
 
-  val orderedResult = rollingStatsDF
-    .filter(col("transactionDay") =!= 1)
-    .withColumn("accountIdNum", regexp_extract(col("accountId"), "\\d+", 0).cast("int"))
-    .orderBy("transactionDay", "accountIdNum")
-    .drop("accountIdNum")
-
+  val orderedResult = {
+    import spark.implicits._
+    
+    rollingStatsDF
+      .filter(col("transactionDay") =!= 1)
+      .withColumn("accountIdNum", regexp_extract(col("accountId"), "\\d+", 0).cast("int"))
+      .orderBy("transactionDay", "accountIdNum")
+      .drop("accountIdNum")
+      .as[RollingStats]
+  }
+  
   orderedResult.show(2000)
 
   spark.stop()

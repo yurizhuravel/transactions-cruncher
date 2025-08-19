@@ -37,6 +37,25 @@ object Domain {
     FF: Double,
     GG: Double
   )
-  implicit val averageByTxTypeEncoder: Encoder[AverageByTxType] =
-    Encoders.product[AverageByTxType]
+
+  final case class DailyAggregated(
+    accountId: String,
+    transactionDay: Long,
+    maxPerDay: Double,
+    totalPerDay: Double,
+    countPerDay: Int,
+    AAPerDay: Double,
+    CCPerDay: Double,
+    FFPerDay: Double
+  )
+
+  final case class RollingStats(
+    transactionDay: Long,
+    accountId: String,
+    maxTransaction: Double,
+    avgTransaction: Double,
+    AATotalValue: Double,
+    CCTotalValue: Double,
+    FFTotalValue: Double
+  )
 }

@@ -8,18 +8,20 @@ import org.apache.spark.sql.expressions.scalalang.typed
 import scala.math.BigDecimal.RoundingMode
 
 object DailyTotalCalculator extends App {
-  import spark.implicits._
 
   def toTwoDecimals(num: Double) = BigDecimal(num).setScale(2, RoundingMode.HALF_UP).toDouble // rounding to money format
 
-  def dailyTransactionsTotal(sourceDS: Dataset[Transaction]): Dataset[DailyTotal] =
+  def dailyTransactionsTotal(sourceDS: Dataset[Transaction]): Dataset[DailyTotal] = {
+    import spark.implicits._
+    
     sourceDS
-      .groupByKey(_.transactionDay)
-      .agg(typed.sum[Transaction](_.transactionAmount).name("dailyTransactionsTotal"))
-      .map { case (day, total) =>        
-        DailyTotal(day, toTwoDecimals(total))
-      }
-      .sort('transactionDay)
+    .groupByKey(_.transactionDay)
+    .agg(typed.sum[Transaction](_.transactionAmount).name("dailyTransactionsTotal"))
+    .map { case (day, total) =>        
+      DailyTotal(day, toTwoDecimals(total))
+    }
+    .sort('transactionDay)
+}
 
   dailyTransactionsTotal(transactionsDS).show(100)
   
