@@ -9,6 +9,7 @@ object AvgByTypeCalculator extends App {
 
   def avgTransactionsByType(sourceDS: Dataset[Transaction]): Dataset[AverageByTxType] = {
     val targetTxTypes = Seq("AA", "BB", "CC", "DD", "EE", "FF", "GG")
+    logger.info(s"Starting average calculation for transaction types ${targetTxTypes.mkString(",")}")
 
     import spark.implicits._
     sourceDS

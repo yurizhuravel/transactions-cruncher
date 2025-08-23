@@ -7,14 +7,9 @@ import cruncher.Domain._
 import cruncher.DailyTotalCalculator
 import org.apache.spark.sql.Dataset
 
-class DailyTotalCalculatorSpec extends AnyFunSuite with Matchers {
+class DailyTotalCalculatorSpec extends AnyFunSuite with Matchers with SparkTester {
 
-  implicit val spark: SparkSession = SparkSession.builder()
-    .appName("Daily Total Test")
-    .master("local[*]")
-    .getOrCreate()
-
-  import spark.implicits._
+  import sparkTestSession.implicits._
 
   test("dailyTransactionsTotal should calculate daily totals correctly") {
 

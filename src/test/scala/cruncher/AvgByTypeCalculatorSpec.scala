@@ -7,14 +7,9 @@ import cruncher.Domain._
 import cruncher.AvgByTypeCalculator
 import org.apache.spark.sql.Dataset
 
-class AvgByTypeCalculatorSpec extends AnyFunSuite with Matchers {
-
-  implicit val spark: SparkSession = SparkSession.builder()
-    .appName("AvgByTypeCalculatorTest")
-    .master("local[*]")
-    .getOrCreate()
-
-  import spark.implicits._
+class AvgByTypeCalculatorSpec extends AnyFunSuite with Matchers with SparkTester {
+  
+  import sparkTestSession.implicits._
 
   test("avgTransactionsByType should calculate average transaction amounts by type correctly") {
  

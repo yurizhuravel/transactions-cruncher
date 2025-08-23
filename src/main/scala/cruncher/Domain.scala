@@ -2,8 +2,11 @@ package cruncher
 
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Encoder, Encoders}
+import org.slf4j.LoggerFactory
 
 object Domain {
+
+  val logger = LoggerFactory.getLogger(this.getClass)
 
   val transactionsSchema = StructType(Array(
     StructField("transactionId", StringType),
