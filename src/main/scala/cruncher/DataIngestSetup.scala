@@ -10,7 +10,7 @@ object DataIngestSetup {
     .master("local[*]")
     .getOrCreate()
 
-  val transactionsFilePath = "src/main/resources/data/transactions.txt"
+  val transactionsFilePath = "src/main/resources/data"
 
   val transactionsDFOptions = Map(
     "inferSchema" -> "false",

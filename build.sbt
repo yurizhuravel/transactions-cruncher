@@ -14,6 +14,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion,
   "org.apache.spark" %% "spark-sql" % sparkVersion,
+  "org.apache.spark" %% "spark-streaming" % sparkVersion,
   "ch.qos.logback" % "logback-classic" % "1.5.18" ,
   "org.scalatest" %% "scalatest" % "3.2.19" % Test
 )
